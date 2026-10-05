@@ -1,0 +1,87 @@
+* {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.senha-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(120deg, #874bf5 30%, #4b5dff 70%, #441bff 100%);
+}
+
+.form__senha {
+  width: 400px;
+  background: #fff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.form__senha h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.form__senha form {
+  width: 100%;
+}
+
+.input__senha {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input__senha input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: 0.3s;
+  outline: none;
+}
+
+.input__senha i {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  color: #777;
+}
+
+.msgErrorConfirmarSenha {
+  display: block;
+  color: #e63946;
+  font-size: 13px;
+  margin: 5px 0 10px;
+  min-height: 18px;
+}
+
+.msgErrorConfirmarSenha.success {
+  color: #4ade80;
+}
+
+.redefinirSenha {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background-color: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.redefinirSenha:hover {
+  background-color: #372fc9;
+}
+
+@media (max-width: 500px) {
+  .form__senha {
+    width: 90%;
+    padding: 30px;
+  }
+}

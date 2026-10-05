@@ -1,0 +1,392 @@
+.main-login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #fff;
+}
+
+.login-page.dark main {
+  background-color: #000;
+}
+
+.login-page.dark .container {
+  background-color: #000;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+}
+
+.login-page.dark .form__box {
+  background-color: #000;
+}
+
+.login-page.dark form,
+.login-page.dark .forgot__link a {
+  color: #fff;
+}
+
+.login-page.dark .input__box input {
+  background: #111;
+  color: #fff;
+}
+
+.login-page.dark .input__box input::placeholder {
+  color: #ddd;
+}
+
+.login-page {
+  --bg-color: #fff;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  min-height: 100vh;
+}
+
+.login-page.dark {
+  --bg-color: #000;
+  --shadow-color: rgba(255, 255, 255, 0.3);
+}
+
+.container {
+  position: relative;
+  width: 90%;
+  height: 550px;
+  background-color: #fff;
+  border-radius: 25px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.form__box {
+  position: absolute;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background-color: #fff;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #000;
+  z-index: 1;
+  transition: none;
+}
+
+.container.active .form__box {
+  right: 50%;
+}
+
+.form__box.register {
+  visibility: hidden;
+}
+
+.container.active .form__box.register {
+  visibility: visible;
+}
+
+.form__box.login .input__box {
+  width: 100%;
+}
+
+.form__box.register h1 {
+  width: 100%;
+}
+
+.form__box form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.container h1 {
+  font-size: 2rem;
+  margin: -10px 0;
+}
+
+.input__box {
+  width: calc(50% - 10px);
+  position: relative;
+}
+
+.input__box input {
+  width: 100%;
+  padding: 13px 50px 13px 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: #000;
+  font-weight: 600;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.input__box input::placeholder {
+  color: #000;
+  font-weight: 400;
+}
+
+.input__box i {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.3rem;
+  color: #000;
+}
+
+.forgot__link {
+  width: 100%;
+  text-align: end;
+  margin: -15px 0 15px;
+}
+
+.forgot__link a {
+  font-size: 0.9rem;
+  color: #000;
+  text-decoration: none;
+}
+
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.custom-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.custom-checkbox-container input {
+  accent-color: #4b5dff;
+}
+
+.btn {
+  width: 100%;
+  height: 48px;
+  background: linear-gradient(120deg, #b791ff 30%, #4b5dff 70%, #441bff 100%);
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.container p {
+  font-size: 0.9rem;
+  margin: 15px 0;
+}
+
+.result-message {
+  width: 100%;
+  min-height: 20px;
+  margin-top: 10px !important;
+  font-size: 14px !important;
+  text-align: center;
+}
+
+.field-error {
+  display: block;
+  color: #ff5555;
+  font-size: 11px;
+  text-align: left;
+  margin-top: 3px;
+}
+
+.toggle__box {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.toggle__box::before {
+  content: "";
+  position: absolute;
+  left: -250%;
+  width: 300%;
+  height: 100%;
+  background-color: #5f1feb;
+  border-radius: 150px;
+  z-index: 2;
+  transition: all 1.8s ease-in-out;
+}
+
+.container.active .toggle__box::before {
+  left: 50%;
+  background-color: #033fc0;
+}
+
+.toggle__panel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background-color: transparent;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  transition: all 0.6s ease-in-out;
+  text-align: center;
+  padding: 15px;
+}
+
+.img {
+  width: 25%;
+  height: 25%;
+  border-radius: 5%;
+  object-fit: contain;
+}
+
+.toggle__panel.toggle__left {
+  left: 0;
+  transition-delay: 1.2s;
+}
+
+.slogan {
+  font-style: italic;
+  color: #270070;
+  font-size: 2rem;
+}
+
+.container.active .toggle__panel.toggle__left {
+  left: -50%;
+  transition-delay: 0.6s;
+}
+
+.toggle__panel.toggle__right {
+  right: -50%;
+}
+
+.container.active .toggle__panel.toggle__right {
+  right: 0;
+  transition-delay: 1.2s;
+}
+
+.toggle__panel p {
+  margin-bottom: 20px;
+}
+
+.toggle__panel .btn {
+  width: 160px;
+  height: 46px;
+  background: transparent;
+  border: 2px solid #fff;
+  box-shadow: none;
+}
+
+.mode__tog {
+  padding: 10px;
+  border-radius: 100%;
+  box-shadow: inset 1px 1px 5px var(--shadow-color);
+  background-color: var(--bg-color);
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 20;
+}
+
+.mode__tog-moon,
+.mode__tog-sun {
+  width: 20px;
+  height: 20px;
+  transition: all 0.5s ease;
+}
+
+.mode__tog-moon {
+  position: absolute;
+  opacity: 0;
+  transform: rotate(360deg) scale(0);
+}
+
+.mode__tog.active .mode__tog-sun {
+  opacity: 0;
+  transform: rotate(360deg) scale(0);
+}
+
+.mode__tog.active .mode__tog-moon {
+  opacity: 1;
+  transform: rotate(0) scale(1);
+}
+
+@media screen and (max-width: 650px) {
+  .container {
+    height: calc(100vh - 40px);
+  }
+
+  .form__box {
+    bottom: 0;
+    width: 100%;
+    height: 70%;
+  }
+
+  .container.active .form__box {
+    right: 0;
+    bottom: 30%;
+  }
+
+  .toggle__box::before {
+    left: 0;
+    top: -270%;
+    width: 100%;
+    height: 300%;
+    border-radius: 20vw;
+  }
+
+  .container.active .toggle__box::before {
+    left: 0;
+    top: 70%;
+  }
+
+  .toggle__panel {
+    width: 100%;
+    height: 30%;
+  }
+
+  .toggle__panel.toggle__left {
+    top: 0;
+  }
+
+  .container.active .toggle__panel.toggle__left {
+    left: 0;
+    top: -30%;
+  }
+
+  .toggle__panel.toggle__right {
+    right: 0;
+    bottom: -30%;
+  }
+
+  .container.active .toggle__panel.toggle__right {
+    bottom: 0;
+  }
+
+  .form__box.login form {
+    flex-direction: column;
+  }
+
+  .form__box.register form {
+    gap: 10px;
+  }
+
+  .input__box {
+    width: 100%;
+  }
+
+  .forgot__link {
+    margin: -10px 0 15px;
+  }
+
+  .slogan {
+    font-size: 1rem;
+  }
+}
