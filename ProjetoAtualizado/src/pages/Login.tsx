@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import ThemeToggle from "../components/ThemeToggle";
 import "../styles/login.css";
 
 type Status = {
@@ -21,18 +23,9 @@ type AuthResponse = {
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { dark } = useTheme();
 
   const [active, setActive] = useState(false);
-
-  // ALTERAÇÃO: recupera o tema salvo
-  const [dark, setDark] = useState(() => {
-    return localStorage.getItem("theme") !== "light";
-  });
-
-  // ALTERAÇÃO: salva o tema sempre que ele mudar
-  useEffect(() => {
-    localStorage.setItem("theme", dark ? "dark" : "light");
-  }, [dark]);
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginSenha, setLoginSenha] = useState("");
@@ -269,23 +262,7 @@ export default function Login() {
   return (
     <div className={dark ? "login-page dark" : "login-page"}>
 
-      <button
-        className={dark ? "mode__tog active" : "mode__tog"}
-        aria-label="Alterar tema"
-        onClick={() => setDark((value) => !value)}
-      >
-        <img
-          src="/images/moon.png"
-          alt="Tema escuro"
-          className="mode__tog-moon"
-        />
-
-        <img
-          src="/images/sun.png"
-          alt="Tema claro"
-          className="mode__tog-sun"
-        />
-      </button>
+      <ThemeToggle />
 
       <main className="main-login">
 

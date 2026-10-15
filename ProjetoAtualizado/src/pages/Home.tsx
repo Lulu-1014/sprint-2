@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
+import ThemeToggle from "../components/ThemeToggle";
 import "../styles/home.css";
 
 type User = {
@@ -56,23 +58,7 @@ export default function Home() {
   const [menuComentarioAberto, setMenuComentarioAberto] = useState<number | null>(null);
   const [menuPostAberto, setMenuPostAberto] = useState<number | null>(null);
 
-  const [dark, setDark] = useState(
-    () => localStorage.getItem("theme") !== "light"
-  );
-
-  useEffect(() => {
-    const verificarTema = () => {
-      setDark(localStorage.getItem("theme") !== "light");
-    };
-
-    window.addEventListener("storage", verificarTema);
-    return () => window.removeEventListener("storage", verificarTema);
-  }, []);
-
-  useEffect(() => {
-    document.body.classList.toggle("dark-theme", dark);
-    document.body.classList.toggle("light-theme", !dark);
-  }, [dark]);
+  const { dark } = useTheme();
 
   useEffect(() => {
     async function carregarPublicacoes() {
@@ -511,6 +497,7 @@ export default function Home() {
 
   return (
     <div className={dark ? "home-page dark" : "home-page light"}>
+      <ThemeToggle />
       <div className="app">
         <aside className="sidebar">
           <div className="logo">
@@ -880,7 +867,7 @@ export default function Home() {
               <div className="card">
                 <p>
                   <strong>Usuário:</strong>{" "}
-                  {user?.nome_usuario || "Não informado"}
+                  {user?.username || (user as any)?.nome_usuario || "Não informado"}
                 </p>
 
                 <p>

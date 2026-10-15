@@ -270,41 +270,6 @@
   box-shadow: none;
 }
 
-.mode__tog {
-  padding: 10px;
-  border-radius: 100%;
-  box-shadow: inset 1px 1px 5px var(--shadow-color);
-  background-color: var(--bg-color);
-  border: none;
-  cursor: pointer;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 20;
-}
-
-.mode__tog-moon,
-.mode__tog-sun {
-  width: 20px;
-  height: 20px;
-  transition: all 0.5s ease;
-}
-
-.mode__tog-moon {
-  position: absolute;
-  opacity: 0;
-  transform: rotate(360deg) scale(0);
-}
-
-.mode__tog.active .mode__tog-sun {
-  opacity: 0;
-  transform: rotate(360deg) scale(0);
-}
-
-.mode__tog.active .mode__tog-moon {
-  opacity: 1;
-  transform: rotate(0) scale(1);
-}
 
 @media screen and (max-width: 650px) {
   .container {

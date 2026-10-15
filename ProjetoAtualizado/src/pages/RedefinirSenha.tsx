@@ -1,9 +1,12 @@
 import { FormEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
+import ThemeToggle from "../components/ThemeToggle";
 import "../styles/redefinirSenha.css";
 
 export default function RedefinirSenha() {
   const navigate = useNavigate();
+  const { dark } = useTheme();
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [mensagem, setMensagem] = useState("");
@@ -32,7 +35,9 @@ export default function RedefinirSenha() {
   }
 
   return (
-    <div className="senha-page">
+    <div className={dark ? "senha-page dark" : "senha-page light"}>
+      <ThemeToggle />
+
       <div className="form__senha">
         <form onSubmit={handleSubmit}>
           <h1>Redefinir Senha</h1>
@@ -40,9 +45,10 @@ export default function RedefinirSenha() {
           <div className="input__senha">
             <input
               type="password"
-              placeholder="Password"
+              placeholder="Nova senha"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
+              required
             />
             <i className="bx bxs-lock-alt"></i>
           </div>
@@ -50,20 +56,31 @@ export default function RedefinirSenha() {
           <div className="input__senha">
             <input
               type="password"
-              placeholder="Confirm password"
+              placeholder="Confirmar nova senha"
               value={confirmarSenha}
               onChange={(e) => setConfirmarSenha(e.target.value)}
+              required
             />
             <i className="bx bxs-lock-alt"></i>
           </div>
 
-          <span className={sucesso ? "msgErrorConfirmarSenha success" : "msgErrorConfirmarSenha"}>
+          <span
+            className={
+              sucesso
+                ? "msgErrorConfirmarSenha success"
+                : "msgErrorConfirmarSenha"
+            }
+          >
             {mensagem}
           </span>
 
           <button className="redefinirSenha" type="submit">
             Redefinir senha
           </button>
+
+          <div className="voltar-login">
+            <Link to="/">Voltar para o Login</Link>
+          </div>
         </form>
       </div>
     </div>
