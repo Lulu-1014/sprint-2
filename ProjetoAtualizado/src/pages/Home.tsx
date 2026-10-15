@@ -15,6 +15,7 @@ type Comment = {
   id: number;
   text: string;
   username?: string;
+  authorId?: string | number;
   anonymous: boolean;
 };
 
@@ -33,7 +34,7 @@ const API_URL = "http://localhost:3000/api/publicacoes";
 export default function Home() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-
+  console.log(user)
   const [pagina, setPagina] = useState<"inicio" | "conta" | "apoio">("inicio");
   const [postText, setPostText] = useState("");
   const [category, setCategory] = useState("");
@@ -52,6 +53,8 @@ export default function Home() {
   const [textoComentarioEditado, setTextoComentarioEditado] = useState("");
   const [postComentarioEditando, setPostComentarioEditando] = useState<number | null>(null);
   const [atualizandoComentario, setAtualizandoComentario] = useState(false);
+  const [menuComentarioAberto, setMenuComentarioAberto] = useState<number | null>(null);
+  const [menuPostAberto, setMenuPostAberto] = useState<number | null>(null);
 
   const [dark, setDark] = useState(
     () => localStorage.getItem("theme") !== "light"
@@ -114,6 +117,11 @@ export default function Home() {
                 comentario.username ??
                 comentario.nome_usuario ??
                 comentario.usuario?.nome_usuario,
+              authorId:
+                comentario.authorId ??
+                comentario.id_usuario ??
+                comentario.usuario?.id_usuario ??
+                comentario.usuario?.id,
               anonymous: Boolean(
                 comentario.anonymous ?? comentario.anonimo
               ),
@@ -263,17 +271,23 @@ export default function Home() {
 
       const item = dados.comentario ?? dados.comment ?? dados;
 
+
       const novoComentario: Comment = {
-        id: Number(item.id ?? item.id_comentario),
+        id: Number(item.id ?? item.id_comentario ?? dados.id_comentario),
         text: item.text ?? item.conteudo ?? texto,
         username:
           item.username ??
           item.nome_usuario ??
           user?.username,
+        authorId:
+          item.authorId ??
+          item.id_usuario ??
+          user?.id,
         anonymous: Boolean(
           item.anonymous ?? item.anonimo ?? comentarioAnonimo
         ),
       };
+
 
       if (!novoComentario.id || Number.isNaN(novoComentario.id)) {
         throw new Error(
@@ -438,6 +452,46 @@ export default function Home() {
       );
     }
   }
+
+  async function deletarPost(postId: number) {
+    const confirmar = window.confirm(
+      "Tem certeza de que deseja excluir esta publicação?"
+    );
+
+    if (!confirmar) {
+      return;
+    }
+
+    try {
+      const resposta = await fetch(`${API_URL}/${postId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      const dados = await resposta.json().catch(() => ({}));
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.mensagem ??
+          dados.message ??
+          "Não foi possível excluir a publicação."
+        );
+      }
+
+      setPosts((atuais) =>
+        atuais.filter((post) => post.id !== postId)
+      );
+
+      setErrorPost("");
+    } catch (erro) {
+      setErrorPost(
+        erro instanceof Error
+          ? erro.message
+          : "Erro ao excluir a publicação."
+      );
+    }
+  }
+
 
   const postsFiltrados = posts.filter((post) => {
     const textoBusca = search.toLowerCase();
@@ -611,6 +665,40 @@ export default function Home() {
                               {post.category}
                             </span>
                           </div>
+
+                          {post.authorId !== undefined &&
+                            user?.id !== undefined &&
+                            String(post.authorId) === String(user.id) && (
+                              <div className="post-menu">
+                                <button
+                                  type="button"
+                                  className="post-menu-button"
+                                  onClick={() =>
+                                    setMenuPostAberto(
+                                      menuPostAberto === post.id
+                                        ? null
+                                        : post.id
+                                    )
+                                  }
+                                >
+                                  ⋮
+                                </button>
+
+                                {menuPostAberto === post.id && (
+                                  <div className="post-menu-options">
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        deletarPost(post.id);
+                                        setMenuPostAberto(null);
+                                      }}
+                                    >
+                                      Deletar
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            )}
                         </div>
 
                         <p className="post-text">{post.text}</p>
@@ -623,14 +711,10 @@ export default function Home() {
                               </div>
 
                               <div className="comment-content">
-                                <strong>
-                                  {comment.anonymous
-                                    ? "Anônimo"
-                                    : comment.username || "Usuário"}
-                                </strong>
+
 
                                 {comentarioEditando === comment.id &&
-                                postComentarioEditando === post.id ? (
+                                  postComentarioEditando === post.id ? (
                                   <div className="edit-comment">
                                     <textarea
                                       value={textoComentarioEditado}
@@ -673,36 +757,57 @@ export default function Home() {
                                   </div>
                                 ) : (
                                   <>
-                                    <p>{comment.text}</p>
+                                    <div>
+                                      <strong>
+                                        {comment.anonymous
+                                          ? "Anônimo"
+                                          : comment.username || "Usuário"}
+                                      </strong>
+                                      <p>{comment.text}</p>
+                                    </div>
 
-                                    {comment.username === user?.username &&
-                                      !comment.anonymous && (
-                                        <div className="comment-actions">
+
+                                    {comment.authorId !== undefined &&
+                                      user?.id !== undefined &&
+                                      String(comment.authorId) === String(user.id) && (
+                                        <div className="comment-menu">
                                           <button
                                             type="button"
-                                            className="edit-comment-button"
+                                            className="comment-menu-button"
                                             onClick={() =>
-                                              iniciarEdicaoComentario(
-                                                post.id,
-                                                comment
+                                              setMenuComentarioAberto(
+                                                menuComentarioAberto === comment.id
+                                                  ? null
+                                                  : comment.id
                                               )
                                             }
                                           >
-                                            Editar
+                                            ⋮
                                           </button>
 
-                                          <button
-                                            type="button"
-                                            className="delete-comment-button"
-                                            onClick={() =>
-                                              deletarComentario(
-                                                post.id,
-                                                comment.id
-                                              )
-                                            }
-                                          >
-                                            Deletar
-                                          </button>
+                                          {menuComentarioAberto === comment.id && (
+                                            <div className="comment-menu-options">
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  iniciarEdicaoComentario(post.id, comment);
+                                                  setMenuComentarioAberto(null);
+                                                }}
+                                              >
+                                                Editar
+                                              </button>
+
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  deletarComentario(post.id, comment.id);
+                                                  setMenuComentarioAberto(null);
+                                                }}
+                                              >
+                                                Deletar
+                                              </button>
+                                            </div>
+                                          )}
                                         </div>
                                       )}
                                   </>
@@ -775,7 +880,7 @@ export default function Home() {
               <div className="card">
                 <p>
                   <strong>Usuário:</strong>{" "}
-                  {user?.username || "Não informado"}
+                  {user?.nome_usuario || "Não informado"}
                 </p>
 
                 <p>

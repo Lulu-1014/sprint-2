@@ -154,18 +154,6 @@
   width: 100%;
 }
 
-.custom-checkbox-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.custom-checkbox-container input {
-  accent-color: #4b5dff;
-}
-
 .btn {
   width: 100%;
   height: 48px;

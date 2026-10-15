@@ -355,24 +355,6 @@ export default function Login() {
 
               <div className="form-options">
 
-                <label className="custom-checkbox-container">
-
-                  <input
-                    type="checkbox"
-                    checked={remember}
-                    onChange={(e) =>
-                      setRemember(e.target.checked)
-                    }
-                  />
-
-                  <span className="checkbox-checkmark"></span>
-
-                  <span className="checkbox-label">
-                    Lembrar deste dispositivo
-                  </span>
-
-                </label>
-
               </div>
 
               <p

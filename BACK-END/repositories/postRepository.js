@@ -1,4 +1,3 @@
-
 const { conexao } = require("../config/database");
 
 async function listar(id_usuario = 0) {
@@ -43,8 +42,10 @@ async function listar(id_usuario = 0) {
     JOIN usuarios u
       ON p.id_usuario = u.id_usuario
 
-    LEFT JOIN curtidas c
+       LEFT JOIN curtidas c
       ON p.id_publicacao = c.id_publicacao
+
+    WHERE p.excluido = FALSE
 
     GROUP BY p.id_publicacao
 
@@ -59,11 +60,9 @@ async function listar(id_usuario = 0) {
   }
 
   // IDs das publicações
-  const ids = rows.map(row => row.id);
+  const ids = rows.map((row) => row.id);
 
-  const placeholders = ids
-    .map(() => "?")
-    .join(", ");
+  const placeholders = ids.map(() => "?").join(", ");
 
   // Buscar comentários das publicações
   const [comentarios] = await conexao.execute(
@@ -89,14 +88,15 @@ async function listar(id_usuario = 0) {
         ON c.id_usuario = u.id_usuario
 
       WHERE c.id_publicacao IN (${placeholders})
+        AND c.excluido = FALSE
 
       ORDER BY c.data_comentario ASC
     `,
-    ids
+    ids,
   );
 
   // Montar resultado final
-  return rows.map(row => ({
+  return rows.map((row) => ({
     ...row,
 
     // Garantir que o MySQL BOOLEAN vire true/false
@@ -104,33 +104,28 @@ async function listar(id_usuario = 0) {
     anonymous: Boolean(row.anonymous),
 
     comments: comentarios
-      .filter(comentario =>
-        Number(comentario.id_publicacao) === Number(row.id)
+      .filter(
+        (comentario) => Number(comentario.id_publicacao) === Number(row.id),
       )
-      .map(comentario => ({
+      .map((comentario) => ({
         id: comentario.id,
         id_usuario: comentario.id_usuario,
+        authorId: comentario.id_usuario,
         text: comentario.text,
         timestamp: comentario.timestamp,
         username: comentario.username,
 
         // Retorna se o comentário é anônimo
-        anonymous: Boolean(comentario.anonymous)
-      }))
+        anonymous: Boolean(comentario.anonymous),
+      })),
   }));
 }
-
 
 async function criar(post) {
   const [result] = await conexao.execute(
     `INSERT INTO publicacoes (id_usuario, conteudo, categoria, anonimo)
      VALUES (?, ?, ?, ?)`,
-    [
-      post.id_usuario,
-      post.conteudo,
-      post.categoria || "Outros",
-      post.anonimo
-    ]
+    [post.id_usuario, post.conteudo, post.categoria || "Outros", post.anonimo],
   );
   return result.insertId;
 }
@@ -138,19 +133,19 @@ async function criar(post) {
 async function alternarCurtida(id_usuario, id_publicacao) {
   const [existente] = await conexao.execute(
     `SELECT * FROM curtidas WHERE id_usuario = ? AND id_publicacao = ?`,
-    [id_usuario, id_publicacao]
+    [id_usuario, id_publicacao],
   );
 
   if (existente.length > 0) {
     await conexao.execute(
       `DELETE FROM curtidas WHERE id_usuario = ? AND id_publicacao = ?`,
-      [id_usuario, id_publicacao]
+      [id_usuario, id_publicacao],
     );
     return { curtido: false };
   } else {
     await conexao.execute(
       `INSERT INTO curtidas (id_usuario, id_publicacao) VALUES (?, ?)`,
-      [id_usuario, id_publicacao]
+      [id_usuario, id_publicacao],
     );
     return { curtido: true };
   }
@@ -161,7 +156,7 @@ async function criarComentario(id_usuario, id_publicacao, comentario, anonimo) {
     `INSERT INTO comentarios
       (id_usuario, id_publicacao, comentario, anonimo)
      VALUES (?, ?, ?, ?)`,
-    [id_usuario, id_publicacao, comentario, anonimo]
+    [id_usuario, id_publicacao, comentario, anonimo],
   );
 
   return result.insertId;
@@ -179,11 +174,75 @@ async function listarComentarios(id_publicacao) {
     FROM comentarios c
     JOIN usuarios u ON c.id_usuario = u.id_usuario
     WHERE c.id_publicacao = ?
+    AND c.excluido = FALSE
     ORDER BY c.data_comentario ASC`,
-    [id_publicacao]
+    [id_publicacao],
   );
 
   return rows;
+}
+
+async function atualizarComentario(
+  id_usuario,
+  id_publicacao,
+  id_comentario,
+  comentario,
+) {
+  const [result] = await conexao.execute(
+    `UPDATE comentarios
+     SET comentario = ?
+     WHERE id_comentario = ?
+       AND id_publicacao = ?
+       AND id_usuario = ?`,
+    [comentario, id_comentario, id_publicacao, id_usuario],
+  );
+
+  console.log("Resultado da edição:", {
+    id_usuario,
+    id_publicacao,
+    id_comentario,
+    affectedRows: result.affectedRows,
+    changedRows: result.changedRows,
+  });
+
+  if (result.affectedRows === 0) {
+    throw new Error(
+      "Nenhuma linha foi encontrada ou o comentário não foi alterado.",
+    );
+  }
+
+  return true;
+}
+
+async function deletarComentario(id_usuario, id_publicacao, id_comentario) {
+  const [result] = await conexao.execute(
+    `UPDATE comentarios
+     SET excluido = TRUE
+     WHERE id_comentario = ?
+       AND id_publicacao = ?
+       AND id_usuario = ?
+       AND excluido = FALSE`,
+    [id_comentario, id_publicacao, id_usuario],
+  );
+
+  if (result.affectedRows === 0) {
+    throw new Error("Comentário não encontrado ou você não pode excluí-lo.");
+  }
+
+  return true;
+}
+
+async function deletarPublicacao(id_publicacao, id_usuario) {
+  const [resultado] = await conexao.execute(
+    `UPDATE publicacoes
+     SET excluido = TRUE
+     WHERE id_publicacao = ?
+       AND id_usuario = ?
+       AND excluido = FALSE`,
+    [id_publicacao, id_usuario],
+  );
+
+  return resultado.affectedRows > 0;
 }
 
 module.exports = {
@@ -191,5 +250,8 @@ module.exports = {
   criar,
   alternarCurtida,
   criarComentario,
-  listarComentarios
+  listarComentarios,
+  atualizarComentario,
+  deletarComentario,
+  deletarPublicacao,
 };
