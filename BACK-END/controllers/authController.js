@@ -122,9 +122,30 @@ async function me(req, res) {
   }
 }
 
+async function logout(req, res) {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+
+    return res.status(200).json({
+      mensagem: "Logout realizado com sucesso!",
+    });
+  } catch (erro) {
+    console.error("Erro no logout:", erro);
+
+    return res.status(500).json({
+      mensagem: "Erro ao realizar logout.",
+    });
+  }
+}
+
 module.exports = {
   cadastrar,
   login,
+  logout,
   perfil,
   atualizarPerfil,
   me,

@@ -90,26 +90,28 @@ body.dark-theme,
    Mantendo 100% da identidade visual criada pelo usuário
    ========================================================= */
 .mode__tog {
-  padding: 10px;
-  border-radius: 100%;
-  box-shadow: inset 1px 1px 5px var(--shadow-color);
-  background-color: var(--bg-color);
-  border: none;
+  padding: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-surface);
+  box-shadow: var(--popover-shadow);
   cursor: pointer;
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 24px;
+  right: 24px;
   z-index: 999;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  transition: background-color 0.4s ease, box-shadow 0.4s ease, transform 0.2s ease;
+  width: 46px;
+  height: 46px;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .mode__tog:hover {
-  transform: scale(1.08);
+  transform: scale(1.1);
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 16px rgba(124, 58, 237, 0.35);
 }
 
 .mode__tog:active {
@@ -118,8 +120,8 @@ body.dark-theme,
 
 .mode__tog-moon,
 .mode__tog-sun {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   transition: all 0.5s ease;
   pointer-events: none;
 }

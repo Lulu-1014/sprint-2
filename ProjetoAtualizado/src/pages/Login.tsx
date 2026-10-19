@@ -260,7 +260,7 @@ export default function Login() {
   }
 
   return (
-    <div className={dark ? "login-page dark" : "login-page"}>
+    <div className={dark ? "login-page dark" : "login-page light"}>
 
       <ThemeToggle />
 

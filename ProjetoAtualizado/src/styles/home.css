@@ -331,6 +331,11 @@
   outline: none;
 }
 
+#category option {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+}
+
 .publish {
   height: 36px;
   padding: 0 20px;
@@ -684,6 +689,31 @@
 
 .cancel-comment:hover {
   background: var(--bg-surface);
+  border-color: var(--primary-purple);
+}
+
+.comment-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.edit-comment textarea {
+  width: 100%;
+  min-height: 70px;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-surface-subtle);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.edit-comment textarea:focus {
   border-color: var(--primary-purple);
 }
 

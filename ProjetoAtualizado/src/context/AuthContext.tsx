@@ -64,7 +64,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const logout = async () => {
-    setUser(null);
+    try {
+      await fetch(`${API_URL}/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (error) {
+      console.error("Erro ao realizar logout no servidor:", error);
+    } finally {
+      setUser(null);
+      localStorage.removeItem("token");
+      localStorage.removeItem("never_alone_user");
+    }
   };
 
   return (

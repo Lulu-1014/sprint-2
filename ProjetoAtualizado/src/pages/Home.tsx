@@ -130,11 +130,9 @@ export default function Home() {
     carregarPublicacoes();
   }, []);
 
-  function sair() {
-    logout();
-    localStorage.removeItem("token");
-    localStorage.removeItem("never_alone_user");
-    navigate("/login");
+  async function sair() {
+    await logout();
+    navigate("/");
   }
 
   async function publicarPost() {
