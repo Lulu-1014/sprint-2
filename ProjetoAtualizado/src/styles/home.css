@@ -92,8 +92,9 @@
 
 .nav-item span {
   width: 24px;
-  font-size: 22px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--text-muted);
   transition: color 0.2s ease;
 }
@@ -146,8 +147,9 @@
 
 .logout span {
   width: 24px;
-  font-size: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logout:hover {
@@ -207,8 +209,10 @@
 }
 
 .search span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--text-muted);
-  font-size: 21px;
 }
 
 .search input {
@@ -301,7 +305,22 @@
   flex-wrap: wrap;
 }
 
-.anonymous,
+.anonymous {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  background: var(--bg-surface-subtle);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
 #category {
   height: 36px;
   padding: 0 12px;
@@ -337,6 +356,10 @@
 }
 
 .publish {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   height: 36px;
   padding: 0 20px;
   border: none;
@@ -850,6 +873,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
   border-radius: 22px;
   background: var(--button-gradient);
   color: #ffffff;

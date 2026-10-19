@@ -3,6 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import ThemeToggle from "../components/ThemeToggle";
+import {
+  Home as HomeIcon,
+  User as UserIcon,
+  HeartHandshake,
+  LogOut,
+  Search,
+  UserCheck,
+  UserX,
+  Send,
+  MoreVertical,
+  Trash2,
+  Edit3,
+  LifeBuoy,
+  PhoneCall,
+  MessageCircleHeart,
+} from "lucide-react";
 import "../styles/home.css";
 
 type User = {
@@ -510,26 +526,26 @@ export default function Home() {
               className={pagina === "inicio" ? "nav-item active" : "nav-item"}
               onClick={() => setPagina("inicio")}
             >
-              <span>⌂</span> Início
+              <span><HomeIcon size={20} /></span> Início
             </button>
 
             <button
               className={pagina === "conta" ? "nav-item active" : "nav-item"}
               onClick={() => setPagina("conta")}
             >
-              <span>👤</span> Conta
+              <span><UserIcon size={20} /></span> Conta
             </button>
 
             <button
               className={pagina === "apoio" ? "nav-item active" : "nav-item"}
               onClick={() => setPagina("apoio")}
             >
-              <span>♡</span> Apoio
+              <span><HeartHandshake size={20} /></span> Apoio
             </button>
           </nav>
 
           <button className="logout" onClick={sair}>
-            <span>🚪</span> Sair
+            <span><LogOut size={20} /></span> Sair
           </button>
         </aside>
 
@@ -538,7 +554,7 @@ export default function Home() {
             <>
               <header className="topbar">
                 <div className="search">
-                  <span>⌕</span>
+                  <span><Search size={18} /></span>
                   <input
                     type="text"
                     id="searchInput"
@@ -555,7 +571,7 @@ export default function Home() {
                     {user?.avatar ? (
                       <img src={user.avatar} alt="Avatar" />
                     ) : (
-                      "👤"
+                      <UserIcon size={22} />
                     )}
                   </div>
 
@@ -576,7 +592,15 @@ export default function Home() {
                           type="button"
                           onClick={() => setAnonymous(!anonymous)}
                         >
-                          😎 {anonymous ? "Anônimo" : "Público"}
+                          {anonymous ? (
+                            <>
+                              <UserX size={15} /> Anônimo
+                            </>
+                          ) : (
+                            <>
+                              <UserCheck size={15} /> Público
+                            </>
+                          )}
                         </button>
 
                         <select
@@ -600,6 +624,7 @@ export default function Home() {
                           onClick={publicarPost}
                           disabled={publishing}
                         >
+                          <Send size={14} />
                           {publishing ? "Publicando..." : "Publicar"}
                         </button>
                       </div>
@@ -636,7 +661,7 @@ export default function Home() {
                       <article className="post" key={post.id}>
                         <div className="post-header">
                           <div className="post-avatar">
-                            {post.anonymous ? "😎" : "👤"}
+                            {post.anonymous ? <UserX size={20} /> : <UserIcon size={20} />}
                           </div>
 
                           <div>
@@ -666,7 +691,7 @@ export default function Home() {
                                     )
                                   }
                                 >
-                                  ⋮
+                                  <MoreVertical size={18} />
                                 </button>
 
                                 {menuPostAberto === post.id && (
@@ -678,6 +703,7 @@ export default function Home() {
                                         setMenuPostAberto(null);
                                       }}
                                     >
+                                      <Trash2 size={13} style={{ marginRight: 6 }} />
                                       Deletar
                                     </button>
                                   </div>
@@ -692,7 +718,7 @@ export default function Home() {
                           {post.comments.map((comment) => (
                             <div className="comment" key={comment.id}>
                               <div className="comment-avatar">
-                                {comment.anonymous ? "😎" : "👤"}
+                                {comment.anonymous ? <UserX size={15} /> : <UserIcon size={15} />}
                               </div>
 
                               <div className="comment-content">
@@ -767,7 +793,7 @@ export default function Home() {
                                               )
                                             }
                                           >
-                                            ⋮
+                                            <MoreVertical size={16} />
                                           </button>
 
                                           {menuComentarioAberto === comment.id && (
@@ -779,6 +805,7 @@ export default function Home() {
                                                   setMenuComentarioAberto(null);
                                                 }}
                                               >
+                                                <Edit3 size={13} style={{ marginRight: 6 }} />
                                                 Editar
                                               </button>
 
@@ -789,6 +816,7 @@ export default function Home() {
                                                   setMenuComentarioAberto(null);
                                                 }}
                                               >
+                                                <Trash2 size={13} style={{ marginRight: 6 }} />
                                                 Deletar
                                               </button>
                                             </div>
@@ -833,10 +861,15 @@ export default function Home() {
                                 }))
                               }
                             >
-                              😎{" "}
-                              {(anonymousComment[post.id] ?? true)
-                                ? "Anônimo"
-                                : "Público"}
+                              {(anonymousComment[post.id] ?? true) ? (
+                                <>
+                                  <UserX size={14} /> Anônimo
+                                </>
+                              ) : (
+                                <>
+                                  <UserCheck size={14} /> Público
+                                </>
+                              )}
                             </button>
 
                             <button
@@ -844,6 +877,7 @@ export default function Home() {
                               disabled={sendingComments[post.id]}
                               onClick={() => comentarPost(post.id)}
                             >
+                              <Send size={13} style={{ marginRight: 4 }} />
                               {sendingComments[post.id]
                                 ? "Enviando..."
                                 : "Comentar"}
@@ -886,7 +920,7 @@ export default function Home() {
                     <article className="post" key={post.id}>
                       <div className="post-header">
                         <div className="post-avatar">
-                          {post.anonymous ? "😎" : "👤"}
+                          {post.anonymous ? <UserX size={20} /> : <UserIcon size={20} />}
                         </div>
 
                         <div>
@@ -913,7 +947,9 @@ export default function Home() {
           {pagina === "apoio" && (
             <div className="apoio-page">
               <section className="apoio-card">
-                <div className="apoio-icon">✱</div>
+                <div className="apoio-icon">
+                  <LifeBuoy size={36} />
+                </div>
 
                 <h2>
                   Suporte
@@ -924,7 +960,8 @@ export default function Home() {
                 <p>Ligue em caso de ajuda!</p>
 
                 <a href="tel:188" className="apoio-button">
-                  ☎ &nbsp; Call 188
+                  <PhoneCall size={18} />
+                  Ligue 188
                 </a>
 
                 <a
@@ -933,7 +970,8 @@ export default function Home() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  💬 &nbsp; Chat de apoio
+                  <MessageCircleHeart size={18} />
+                  Chat de apoio
                 </a>
               </section>
             </div>

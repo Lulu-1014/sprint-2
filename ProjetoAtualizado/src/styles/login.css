@@ -108,18 +108,19 @@
   font-weight: 400;
 }
 
-.input__box i {
+.input__box i,
+.input__box .input-icon {
   position: absolute;
   right: 16px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1.25rem;
   color: var(--text-muted);
+  pointer-events: none;
   transition: color 0.2s ease;
 }
 
-.input__box input:focus + span + i,
-.input__box input:focus ~ i {
+.input__box input:focus ~ i,
+.input__box input:focus ~ .input-icon {
   color: var(--primary-purple);
 }
 

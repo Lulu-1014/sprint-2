@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import ThemeToggle from "../components/ThemeToggle";
+import { Lock, ArrowLeft } from "lucide-react";
 import "../styles/redefinirSenha.css";
 
 export default function RedefinirSenha() {
@@ -50,7 +51,7 @@ export default function RedefinirSenha() {
               onChange={(e) => setSenha(e.target.value)}
               required
             />
-            <i className="bx bxs-lock-alt"></i>
+            <Lock className="input-icon" size={18} />
           </div>
 
           <div className="input__senha">
@@ -61,7 +62,7 @@ export default function RedefinirSenha() {
               onChange={(e) => setConfirmarSenha(e.target.value)}
               required
             />
-            <i className="bx bxs-lock-alt"></i>
+            <Lock className="input-icon" size={18} />
           </div>
 
           <span
@@ -79,7 +80,9 @@ export default function RedefinirSenha() {
           </button>
 
           <div className="voltar-login">
-            <Link to="/">Voltar para o Login</Link>
+            <Link to="/">
+              <ArrowLeft size={16} /> Voltar para o Login
+            </Link>
           </div>
         </form>
       </div>

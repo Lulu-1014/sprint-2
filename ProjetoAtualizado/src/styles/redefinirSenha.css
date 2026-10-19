@@ -73,13 +73,20 @@
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
 }
 
-.input__senha i {
+.input__senha i,
+.input__senha .input-icon {
   position: absolute;
   right: 16px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
-  font-size: 1.2rem;
+  pointer-events: none;
+  transition: color 0.2s ease;
+}
+
+.input__senha input:focus ~ i,
+.input__senha input:focus ~ .input-icon {
+  color: var(--primary-purple);
 }
 
 .msgErrorConfirmarSenha {
@@ -126,6 +133,10 @@
 }
 
 .voltar-login a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   color: var(--text-secondary);
   text-decoration: none;
   font-size: 14px;

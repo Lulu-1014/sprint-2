@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import ThemeToggle from "../components/ThemeToggle";
+import { Mail, Lock, User as UserIcon, Calendar } from "lucide-react";
 import "../styles/login.css";
 
 type Status = {
@@ -295,7 +296,7 @@ export default function Login() {
 
                 <span className="msgErrorEmail"></span>
 
-                <i className="bx bxs-envelope"></i>
+                <Mail className="input-icon" size={18} />
 
               </div>
 
@@ -313,7 +314,7 @@ export default function Login() {
 
                 <span className="msgErrorSenha"></span>
 
-                <i className="bx bxs-lock-alt"></i>
+                <Lock className="input-icon" size={18} />
 
               </div>
 
@@ -374,7 +375,7 @@ export default function Login() {
                   {errors.nome}
                 </span>
 
-                <i className="bx bxs-user"></i>
+                <UserIcon className="input-icon" size={18} />
 
               </div>
 
@@ -394,7 +395,7 @@ export default function Login() {
                   {errors.email}
                 </span>
 
-                <i className="bx bxs-envelope"></i>
+                <Mail className="input-icon" size={18} />
 
               </div>
 
@@ -414,7 +415,7 @@ export default function Login() {
                   {errors.senha}
                 </span>
 
-                <i className="bx bxs-lock-alt"></i>
+                <Lock className="input-icon" size={18} />
 
               </div>
 
@@ -434,7 +435,7 @@ export default function Login() {
                   {errors.confirmarSenha}
                 </span>
 
-                <i className="bx bxs-lock-alt"></i>
+                <Lock className="input-icon" size={18} />
 
               </div>
 
@@ -454,7 +455,7 @@ export default function Login() {
                   {errors.idade}
                 </span>
 
-                <i className="bx bxs-calendar"></i>
+                <Calendar className="input-icon" size={18} />
 
               </div>
 
