@@ -15,7 +15,6 @@
 .container {
   position: relative;
   width: 90%;
-  max-width: 920px;
   height: 550px;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-color);

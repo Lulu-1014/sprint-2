@@ -149,14 +149,17 @@ async function deletarComentario(req, res) {
   }
 }
 
+
 async function deletar(req, res) {
   try {
     const id_publicacao = req.params.id;
     const id_usuario = req.usuario.id;
+    const tipo_usuario = req.usuario.tipo_usuario;
 
     const excluida = await postService.deletarPublicacao(
       id_publicacao,
       id_usuario,
+      tipo_usuario === "admin",
     );
 
     if (!excluida) {
@@ -177,6 +180,7 @@ async function deletar(req, res) {
     });
   }
 }
+
 
 module.exports = {
   listar,

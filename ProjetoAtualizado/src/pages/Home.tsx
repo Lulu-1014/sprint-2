@@ -18,6 +18,7 @@ import {
   LifeBuoy,
   PhoneCall,
   MessageCircleHeart,
+  BadgeCheck,
 } from "lucide-react";
 import "../styles/home.css";
 
@@ -27,6 +28,7 @@ type User = {
   email?: string;
   avatar?: string;
   handle?: string;
+  tipo_usuario?: string;
 };
 
 type Comment = {
@@ -45,6 +47,7 @@ type Post = {
   username?: string;
   authorId?: string | number;
   comments: Comment[];
+  tipo_usuario?: string;
 };
 
 const API_URL = "http://localhost:3000/api/publicacoes";
@@ -52,7 +55,7 @@ const API_URL = "http://localhost:3000/api/publicacoes";
 export default function Home() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  console.log(user)
+  console.log("Tipo de usuário:", user?.tipo_usuario);
   const [pagina, setPagina] = useState<"inicio" | "conta" | "apoio">("inicio");
   const [postText, setPostText] = useState("");
   const [category, setCategory] = useState("");
@@ -91,6 +94,13 @@ export default function Home() {
         }
 
         const dados = await resposta.json();
+        console.log(
+          "Tipo do autor:",
+          dados.map((post: Post) => ({
+            username: post.username,
+            tipo_usuario: post.tipo_usuario
+          }))
+        );
 
 
         const lista = Array.isArray(dados)
@@ -111,6 +121,7 @@ export default function Home() {
             item.id_usuario ??
             item.usuario?.id_usuario ??
             item.usuario?.id,
+          tipo_usuario: item.tipo_usuario ?? item.usuario?.tipo_usuario,
           comments: (item.comments ?? item.comentarios ?? []).map(
             (comentario: any) => ({
               id: Number(comentario.id ?? comentario.id_comentario),
@@ -521,31 +532,39 @@ export default function Home() {
             </div>
           </div>
 
-          <nav>
+
+          <nav aria-label="Navegação principal">
             <button
               className={pagina === "inicio" ? "nav-item active" : "nav-item"}
               onClick={() => setPagina("inicio")}
+              aria-current={pagina === "inicio" ? "page" : undefined}
             >
-              <span><HomeIcon size={20} /></span> Início
+              <span aria-hidden="true"><HomeIcon size={20} /></span> Início
             </button>
 
             <button
               className={pagina === "conta" ? "nav-item active" : "nav-item"}
               onClick={() => setPagina("conta")}
+              aria-current={pagina === "conta" ? "page" : undefined}
             >
-              <span><UserIcon size={20} /></span> Conta
+              <span aria-hidden="true"><UserIcon size={20} /></span> Conta
             </button>
 
             <button
               className={pagina === "apoio" ? "nav-item active" : "nav-item"}
               onClick={() => setPagina("apoio")}
+              aria-current={pagina === "apoio" ? "page" : undefined}
             >
-              <span><HeartHandshake size={20} /></span> Apoio
+              <span aria-hidden="true"><HeartHandshake size={20} /></span> Apoio
             </button>
           </nav>
 
-          <button className="logout" onClick={sair}>
-            <span><LogOut size={20} /></span> Sair
+
+          <button className="logout" onClick={sair} type="button">
+            <span aria-hidden="true">
+              <LogOut size={20} />
+            </span>
+            Sair
           </button>
         </aside>
 
@@ -558,6 +577,7 @@ export default function Home() {
                   <input
                     type="text"
                     id="searchInput"
+                    aria-label="Buscar publicações por texto ou categoria"
                     placeholder="Buscar publicações..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
@@ -569,7 +589,7 @@ export default function Home() {
                 <div className="create-post">
                   <div className="user-avatar" id="userAvatarDisplay">
                     {user?.avatar ? (
-                      <img src={user.avatar} alt="Avatar" />
+                      <img src={user.avatar} alt="Sua foto de perfil" />
                     ) : (
                       <UserIcon size={22} />
                     )}
@@ -577,6 +597,7 @@ export default function Home() {
 
                   <div className="post-area">
                     <textarea
+                      aria-label="Escreva sua publicação"
                       id="postText"
                       placeholder="Fale o que você está sentindo"
                       maxLength={500}
@@ -590,6 +611,7 @@ export default function Home() {
                           id="anonymousButton"
                           className={anonymous ? "anonymous active" : "anonymous"}
                           type="button"
+                          aria-pressed={anonymous}
                           onClick={() => setAnonymous(!anonymous)}
                         >
                           {anonymous ? (
@@ -605,6 +627,7 @@ export default function Home() {
 
                         <select
                           id="category"
+                          aria-label="Categoria da publicação"
                           value={category}
                           onChange={(e) => setCategory(e.target.value)}
                         >
@@ -664,11 +687,31 @@ export default function Home() {
                             {post.anonymous ? <UserX size={20} /> : <UserIcon size={20} />}
                           </div>
 
+
                           <div>
-                            <strong>
+                            <strong
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "5px"
+                              }}
+                            >
                               {post.anonymous
                                 ? "Anônimo"
                                 : post.username || "Usuário"}
+
+                              {!post.anonymous &&
+                                post.tipo_usuario === "admin" && (
+                                  <BadgeCheck
+                                    size={18}
+                                    color="#3B82F6"
+                                    strokeWidth={2.5}
+                                    style={{
+                                      display: "inline-block",
+                                      flexShrink: 0
+                                    }}
+                                  />
+                                )}
                             </strong>
 
                             <span className="post-category">
@@ -676,9 +719,15 @@ export default function Home() {
                             </span>
                           </div>
 
-                          {post.authorId !== undefined &&
-                            user?.id !== undefined &&
-                            String(post.authorId) === String(user.id) && (
+
+                          {(
+                            user?.tipo_usuario === "admin" ||
+                            (
+                              post.authorId !== undefined &&
+                              user?.id !== undefined &&
+                              String(post.authorId) === String(user.id)
+                            )
+                          ) && (
                               <div className="post-menu">
                                 <button
                                   type="button"
@@ -896,10 +945,27 @@ export default function Home() {
             <>
               <h1>Conta</h1>
 
+
               <div className="card">
                 <p>
                   <strong>Usuário:</strong>{" "}
-                  {user?.username || (user as any)?.nome_usuario || "Não informado"}
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "5px"
+                    }}
+                  >
+                    {user?.username || (user as any)?.nome_usuario || "Não informado"}
+
+                    {user?.tipo_usuario === "admin" && (
+                      <BadgeCheck
+                        size={18}
+                        color="#3B82F6"
+                        strokeWidth={2.5}
+                      />
+                    )}
+                  </span>
                 </p>
 
                 <p>
@@ -907,6 +973,7 @@ export default function Home() {
                   {user?.email || "Não informado"}
                 </p>
               </div>
+
 
               <div className="card">
                 <h2>Minhas publicações</h2>

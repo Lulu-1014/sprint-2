@@ -2,9 +2,10 @@ const { conexao } = require("../config/database");
 
 async function listar(id_usuario = 0) {
   const query = `
-    SELECT 
+    SELECT    
       p.id_publicacao AS id,
       p.id_usuario,
+      u.tipo_usuario,
       p.conteudo AS text,
       p.categoria AS category,
       p.anonimo AS anonymous,
@@ -232,15 +233,22 @@ async function deletarComentario(id_usuario, id_publicacao, id_comentario) {
   return true;
 }
 
-async function deletarPublicacao(id_publicacao, id_usuario) {
-  const [resultado] = await conexao.execute(
-    `UPDATE publicacoes
-     SET excluido = TRUE
-     WHERE id_publicacao = ?
-       AND id_usuario = ?
-       AND excluido = FALSE`,
-    [id_publicacao, id_usuario],
-  );
+async function deletarPublicacao(id_publicacao, id_usuario, isAdmin = false) {
+  let query = `
+    UPDATE publicacoes
+    SET excluido = TRUE
+    WHERE id_publicacao = ?
+      AND excluido = FALSE
+  `;
+
+  const parametros = [id_publicacao];
+
+  if (!isAdmin) {
+    query += " AND id_usuario = ?";
+    parametros.push(id_usuario);
+  }
+
+  const [resultado] = await conexao.execute(query, parametros);
 
   return resultado.affectedRows > 0;
 }

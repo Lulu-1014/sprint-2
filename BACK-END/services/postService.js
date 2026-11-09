@@ -69,8 +69,12 @@ async function deletarComentario(id_usuario, id_publicacao, id_comentario) {
   );
 }
 
-async function deletarPublicacao(id_publicacao, id_usuario) {
-  return await postRepository.deletarPublicacao(id_publicacao, id_usuario);
+async function deletarPublicacao(id_publicacao, id_usuario, isAdmin = false) {
+  return await postRepository.deletarPublicacao(
+    id_publicacao,
+    id_usuario,
+    isAdmin,
+  );
 }
 
 module.exports = {

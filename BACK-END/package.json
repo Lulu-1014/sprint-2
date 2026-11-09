@@ -4,6 +4,7 @@
   "description": "Back-end simples de login e cadastro para projeto escolar",
   "main": "server.js",
   "scripts": {
+    "test": "vitest",
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
@@ -17,5 +18,9 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.3",
     "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.1",
+    "vitest": "^5.0.5"
   }
 }

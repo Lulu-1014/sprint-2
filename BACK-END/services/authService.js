@@ -49,7 +49,9 @@ async function login(email, senha, lembrar) {
     {
       id: userId,
       nome_usuario: usuario.nome_usuario,
-      email: usuario.email
+      email: usuario.email,
+      tipo_usuario: usuario.tipo_usuario
+
     },
     segredo,
     {
@@ -64,7 +66,8 @@ async function login(email, senha, lembrar) {
       id: userId,
       nome_usuario: usuario.nome_usuario,
       email: usuario.email,
-      idade: usuario.idade
+      idade: usuario.idade,
+      tipo_usuario: usuario.tipo_usuario
     }
   };
 }

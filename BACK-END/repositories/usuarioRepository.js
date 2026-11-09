@@ -11,7 +11,15 @@ async function buscarPorEmail(email) {
 
 async function buscarPorId(id) {
   const [resultado] = await conexao.execute(
-    "SELECT id_usuario as id, nome_usuario, email, idade, data_cadastro FROM usuarios WHERE id_usuario = ?",
+    `SELECT
+      id_usuario AS id,
+      nome_usuario,
+      email,
+      idade,
+      data_cadastro,
+      tipo_usuario
+    FROM usuarios
+    WHERE id_usuario = ?`,
     [id]
   );
 

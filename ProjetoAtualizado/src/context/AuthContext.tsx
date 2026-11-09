@@ -13,6 +13,7 @@ type User = {
   email?: string;
   avatar?: string;
   handle?: string;
+  tipo_usuario?: string;
 };
 
 type AuthContextType = {

@@ -3,8 +3,8 @@ id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(100) UNIQUE NOT NULL, 
     senha VARCHAR(255) NOT NULL, 
     data_cadastro DATETIME DEFAULT CURRENT_TIMESTAMP, 
-    idade number NOT NULL
-
+    idade number NOT NULL,
+    ADD COLUMN tipo_usuario VARCHAR(20) NOT NULL DEFAULT 'usuario';
 ); 
 
 
